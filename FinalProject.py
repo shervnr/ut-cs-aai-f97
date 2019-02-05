@@ -154,14 +154,15 @@ def viterbi(states_observations_test, initial_probability_distribution, new_obse
         new_path = {}
         for j in letters:
             (prob, state) = max(
-                (v[t - 1][i] + log10(new_states[i][j]) + log10(new_observations[j][observations_sequence[t]]), i) for i in
-                letters)
+                (v[t - 1][i] + log10(new_states[i][j]) + log10(new_observations[j][observations_sequence[t]]), i)
+                for i in letters)
             v[t][j] = prob
             new_path[j] = path[state] + [j]
         path = new_path
 
-    (prob, state) = max((v[len(observations_sequence) - 1][s], s) for s in letters)
-    return prob, path[state]
+    # termination step
+    (best_path_prob, best_path_pointer) = max((v[len(observations_sequence) - 1][s], s) for s in letters)
+    return best_path_prob, path[best_path_pointer]
 
 
 def write_file(best_path):
